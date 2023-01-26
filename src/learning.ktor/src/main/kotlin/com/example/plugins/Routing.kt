@@ -5,6 +5,10 @@ import io.ktor.server.response.*
 import io.ktor.server.application.*
 import com.example.services.authentication.AuthenticationManager
 import com.example.services.authentication.IAuthenticationManager
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ContentResponse(var text: String)
 
 fun Application.configureRouting() {
     val authManager: IAuthenticationManager = AuthenticationManager()
@@ -15,7 +19,7 @@ fun Application.configureRouting() {
                 call.respondRedirect("/auth")
                 return@get
             }
-            call.respondText("Hello World!")
+            call.respond(ContentResponse(text = "Hello World!"))
         }
 
         get("/auth") {
