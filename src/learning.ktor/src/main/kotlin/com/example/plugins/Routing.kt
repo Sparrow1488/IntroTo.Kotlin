@@ -3,28 +3,44 @@ package com.example.plugins
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
-import com.example.services.authentication.AuthenticationManager
-import com.example.services.authentication.IAuthenticationManager
 import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
 
 @Serializable
 data class ContentResponse(var text: String)
 
-fun Application.configureRouting() {
-    val authManager: IAuthenticationManager = AuthenticationManager()
+@Serializable
+data class UserResponse(var name: String)
 
+object Users : Table() {
+    val id = integer("id").autoIncrement()
+    val name = varchar("name", length = 50)
+    val cityId = (integer("city_id") references Cities.id).nullable()
+
+    override val primaryKey = PrimaryKey(id, name = "PK_User_ID")
+}
+
+object Cities : Table() {
+    val id = integer("id").autoIncrement()
+    val name = varchar("name", 50)
+
+    override val primaryKey = PrimaryKey(id, name = "PK_Cities_ID")
+}
+
+fun Application.configureRouting() {
     routing {
         get("/") {
-            if(authManager.isAuthenticated(call)){
-                call.respondRedirect("/auth")
-                return@get
-            }
             call.respond(ContentResponse(text = "Hello World!"))
         }
 
-        get("/auth") {
-            authManager.authenticate(call)
-            call.respondRedirect("/")
+        get("/users") {
+            val users = transaction {
+                Users.selectAll()
+                     .map { UserResponse(it[Users.name]) }
+                     .toList()
+            }
+            call.respond(users)
         }
     }
 }

@@ -5,7 +5,7 @@ import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.plugins.contentnegotiation.*
 
 fun Application.configureSerialization() {
-    // Согласование сервера с клиентом формата для общения (ContentNegotiation)
+    // Согласование формата общения сервера с клиентом (ContentNegotiation)
     install(ContentNegotiation) {
         json()
     }
