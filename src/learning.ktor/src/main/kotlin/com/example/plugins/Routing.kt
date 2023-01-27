@@ -3,6 +3,9 @@ package com.example.plugins
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.resources.post
+import io.ktor.server.resources.get
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -11,36 +14,34 @@ import org.jetbrains.exposed.sql.transactions.transaction
 data class ContentResponse(var text: String)
 
 @Serializable
-data class UserResponse(var name: String)
+data class UserResponse(var id: Int, var name: String)
 
-object Users : Table() {
-    val id = integer("id").autoIncrement()
-    val name = varchar("name", length = 50)
-    val cityId = (integer("city_id") references Cities.id).nullable()
-
-    override val primaryKey = PrimaryKey(id, name = "PK_User_ID")
-}
-
-object Cities : Table() {
-    val id = integer("id").autoIncrement()
-    val name = varchar("name", 50)
-
-    override val primaryKey = PrimaryKey(id, name = "PK_Cities_ID")
-}
+@Serializable
+data class UserCreateRequest(var name: String)
 
 fun Application.configureRouting() {
     routing {
-        get("/") {
+        get<HomeResource> {
             call.respond(ContentResponse(text = "Hello World!"))
         }
 
-        get("/users") {
+        get<UsersResource> {
             val users = transaction {
                 Users.selectAll()
-                     .map { UserResponse(it[Users.name]) }
+                     .map { UserResponse(it[Users.id], it[Users.name]) }
                      .toList()
             }
             call.respond(users)
+        }
+
+        post<UsersResource.New> {
+            val request = call.receive<UserCreateRequest>()
+            val userId = transaction {
+                Users.insert {
+                    it[name] = request.name
+                } get Users.id
+            }
+            call.respond(UserResponse(userId, request.name))
         }
     }
 }

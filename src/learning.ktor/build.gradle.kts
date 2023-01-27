@@ -27,6 +27,7 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
 
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-server-resources:$ktor_version")
 
     implementation("org.jetbrains.exposed:exposed-spring-boot-starter:0.41.1")
     implementation("org.postgresql:postgresql:42.2.2")
