@@ -6,6 +6,7 @@ import com.example.plugins.*
 import com.example.routes.configureCitiesRouting
 import com.example.routes.configureUsersRouting
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.resources.*
@@ -18,6 +19,9 @@ fun main() {
         }
         install(StatusPages) {
             configureStatusPages()
+        }
+        install(Authentication) {
+            configureAuthentication()
         }
 
         configureSerialization()

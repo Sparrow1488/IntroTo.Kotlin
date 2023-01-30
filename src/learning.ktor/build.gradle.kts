@@ -32,6 +32,8 @@ dependencies {
     implementation("io.ktor:ktor-server-request-validation:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
 
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
+
     implementation("org.jetbrains.exposed:exposed-spring-boot-starter:0.41.1")
     implementation("org.postgresql:postgresql:42.2.2")
     implementation("com.h2database:h2:2.1.214")
