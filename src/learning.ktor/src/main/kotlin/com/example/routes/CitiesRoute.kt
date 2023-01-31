@@ -24,10 +24,6 @@ fun foo(): Unit {
 }
 
 fun Application.configureCitiesRouting() {
-    val hello: () -> Unit
-    hello = ::foo
-    hello()
-
     routing {
         get<CitiesResource> {
             val cities = transaction {
