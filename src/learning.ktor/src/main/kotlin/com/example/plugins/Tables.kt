@@ -1,6 +1,5 @@
 package com.example.plugins
 
-import com.example.plugins.City.Companion.referrersOn
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -12,17 +11,17 @@ object Users : IntIdTable() {
     val city = reference("city", Cities).nullable()
 }
 
-class User(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<User>(Users)
+class UserDAO(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<UserDAO>(Users)
     var name by Users.name
-    var city by City optionalReferencedOn Users.city
+    var city by CityDAO optionalReferencedOn Users.city
 }
 
 object Cities : IntIdTable() {
     val name: Column<String> = varchar("name", 50)
 }
 
-class City(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<City>(Cities)
+class CityDAO(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<CityDAO>(Cities)
     var name by Cities.name
 }

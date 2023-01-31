@@ -16,7 +16,7 @@ import java.lang.Exception
 fun Application.configureUsersRouting() = routing {
     get<UsersResource> {
         val users = transaction {
-            User.all().map {
+            UserDAO.all().map {
                 UserResponse(it.id.value, it.name)
             }
         }
@@ -27,7 +27,7 @@ fun Application.configureUsersRouting() = routing {
         post<UsersResource.New> {
             val request = call.receive<UserCreateRequest>()
             val user = transaction {
-                User.new {
+                UserDAO.new {
                     name = request.name
                 }
             }
@@ -37,8 +37,8 @@ fun Application.configureUsersRouting() = routing {
         put<UsersResource.Id.Edit> {
             val request = call.receive<UserEditRequest>()
             val user = transaction {
-                val editUser = User.findById(it.parent.id) ?: throw Exception("User not found")
-                val existsCity = City.findById(request.cityId) ?: throw Exception("City not found")
+                val editUser = UserDAO.findById(it.parent.id) ?: throw Exception("User not found")
+                val existsCity = CityDAO.findById(request.cityId) ?: throw Exception("City not found")
                 editUser.city = existsCity
                 editUser
             }
