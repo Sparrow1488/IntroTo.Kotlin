@@ -1,18 +1,28 @@
 package com.example.plugins
 
-import org.jetbrains.exposed.sql.Table
+import com.example.plugins.City.Companion.referrersOn
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Column
 
-object Users : Table() {
-    val id = integer("id").autoIncrement()
-    val name = varchar("name", length = 50)
-    val cityId = (integer("city_id") references Cities.id).nullable()
-
-    override val primaryKey = PrimaryKey(id, name = "PK_User_ID")
+object Users : IntIdTable() {
+    val name: Column<String> = varchar("name", 50)
+    val city = reference("city", Cities).nullable()
 }
 
-object Cities : Table() {
-    val id = integer("id").autoIncrement()
-    val name = varchar("name", 50)
+class User(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<User>(Users)
+    var name by Users.name
+    var city by City optionalReferencedOn Users.city
+}
 
-    override val primaryKey = PrimaryKey(id, name = "PK_Cities_ID")
+object Cities : IntIdTable() {
+    val name: Column<String> = varchar("name", 50)
+}
+
+class City(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<City>(Cities)
+    var name by Cities.name
 }

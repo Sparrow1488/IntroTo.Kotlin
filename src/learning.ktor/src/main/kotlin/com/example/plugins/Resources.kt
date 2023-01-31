@@ -18,4 +18,12 @@ class CitiesResource() {
 class UsersResource() {
     @Resource("new")
     class New(var parent : UsersResource = UsersResource())
+
+    @Resource("{id}")
+    class Id(var parent : UsersResource = UsersResource(), var id: Int) {
+        @Resource("edit")
+        class Edit(var parent : Id) {
+
+        }
+    }
 }

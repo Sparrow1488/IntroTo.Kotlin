@@ -1,6 +1,7 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val exposed_version = "0.40.1"
 
 plugins {
     kotlin("jvm") version "1.8.0"
@@ -34,7 +35,9 @@ dependencies {
 
     implementation("io.ktor:ktor-server-auth:$ktor_version")
 
-    implementation("org.jetbrains.exposed:exposed-spring-boot-starter:0.41.1")
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.postgresql:postgresql:42.2.2")
     implementation("com.h2database:h2:2.1.214")
 

@@ -10,3 +10,6 @@ data class UserResponse(var id: Int, var name: String)
 
 @Serializable
 data class UserCreateRequest(var name: String)
+
+@Serializable
+data class UserEditRequest(var cityId: Int)

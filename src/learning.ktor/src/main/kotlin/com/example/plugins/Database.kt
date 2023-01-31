@@ -1,6 +1,5 @@
 package com.example.plugins
 
-import com.example.plugins.*
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
