@@ -1,7 +1,6 @@
 package com.site.plugins
 
-import com.site.tables.Products
-import com.site.tables.Shops
+import com.site.tables.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.Database
@@ -16,6 +15,12 @@ fun Application.configureDatabase() = routing {
         password = "secret")
 
     transaction {
-        SchemaUtils.create(Products, Shops)
+        SchemaUtils.create(
+            Products,
+            Shops,
+            Users,
+            UserCredentials,
+            Baskets,
+            BasketProducts)
     }
 }

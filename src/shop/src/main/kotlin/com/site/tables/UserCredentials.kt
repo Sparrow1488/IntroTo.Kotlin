@@ -1,0 +1,21 @@
+package com.site.tables
+
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IntIdTable
+
+object UserCredentials : IntIdTable("user_credentials") {
+    val login = varchar("login", 30)
+    val hashedPassword = varchar("hashed_password", 1000)
+    val email = varchar("email", 50).nullable()
+    val phone = varchar("phone", 50).nullable()
+}
+
+class UserCredentialsDAO(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<UserCredentialsDAO>(UserCredentials)
+    var login by UserCredentials.login
+    var hashedPassword by UserCredentials.hashedPassword
+    var email by UserCredentials.email
+    var phone by UserCredentials.phone
+}
