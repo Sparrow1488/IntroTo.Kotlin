@@ -1,5 +1,7 @@
 package com.site.tables
 
+import com.site.abstractions.IContractSerializable
+import com.site.contracts.users.responses.UserResponse
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -12,10 +14,15 @@ object Users : IntIdTable("users") {
     val basket = reference("basket_id", Baskets).nullable()
 }
 
-class UserDAO(id: EntityID<Int>) : IntEntity(id) {
+class UserDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<UserResponse> {
     companion object : IntEntityClass<UserDAO>(Users)
-    val credentials by UserCredentialsDAO referrersOn Users.credentials
+    var credentials by UserCredentialsDAO referencedOn Users.credentials
     var firstName by Users.firstName
     var lastName by Users.lastName
-    val basket by BasketDAO optionalReferrersOn Users.basket
+    var basket by BasketDAO optionalReferencedOn Users.basket
+    override fun toSerializable(): UserResponse = UserResponse(
+        this.id.value,
+        this.firstName,
+        this.lastName
+    )
 }
