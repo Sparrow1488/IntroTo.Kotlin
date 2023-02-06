@@ -7,7 +7,6 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.configureProductsRouting() = routing {
@@ -16,6 +15,15 @@ fun Application.configureProductsRouting() = routing {
             ProductDAO.all().map { it.toSerializable() }
         }
         call.respond(products)
+    }
+
+    get("/products/{id}") {
+        val productId = call.parameters["id"]!!.toInt()
+        val existsProduct = transaction {
+            ProductDAO.findById(productId)?.toSerializable()
+                ?: throw Exception("Product not exists")
+        }
+        call.respond(existsProduct)
     }
 
     post("/products/new") {

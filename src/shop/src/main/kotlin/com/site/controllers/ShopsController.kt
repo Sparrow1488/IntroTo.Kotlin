@@ -16,6 +16,15 @@ fun Application.configureShopsRouting() = routing {
         call.respond(shops)
     }
 
+    get("/shops/{id}") {
+        val shopId = call.parameters["id"]!!.toInt()
+        val existsShop = transaction {
+            ShopDAO.findById(shopId)?.toSerializable()
+                ?: throw Exception("Shop not exists")
+        }
+        call.respond(existsShop)
+    }
+
     post("/shops/new") {
         val request = call.receive<ShopCreateRequest>()
         val created = transaction {
