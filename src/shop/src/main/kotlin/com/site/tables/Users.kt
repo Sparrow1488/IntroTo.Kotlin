@@ -17,6 +17,7 @@ class UserDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<UserResp
     var firstName by Users.firstName
     var lastName by Users.lastName
     val credentials by UserCredentialsDAO backReferencedOn UserCredentials.userId
+    val basket by BasketDAO optionalBackReferencedOn Baskets.userId
 
     override fun toSerializable(): UserResponse = UserResponse(
         this.id.value,
