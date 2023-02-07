@@ -1,4 +1,4 @@
-package com.site.services
+package com.site.infrastructure.services.identity
 
 import com.site.contracts.users.requests.UserCreateRequest
 import com.site.contracts.users.requests.UserLoginRequest

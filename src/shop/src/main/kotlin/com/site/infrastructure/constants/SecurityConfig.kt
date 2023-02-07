@@ -1,4 +1,4 @@
-package com.site.constants
+package com.site.infrastructure.constants
 
 class SecurityConfig {
     val secret = "VERY_HIGH_TOP_SECRET_MOST_SUPER_SECRET_KOROCHE"

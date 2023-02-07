@@ -1,23 +1,23 @@
 package com.site.controllers
 
-import com.site.constants.AppClaims
+import com.site.infrastructure.exceptions.NotFoundException
+import com.site.infrastructure.services.users.UserSession
 import com.site.tables.BasketDAO
 import com.site.tables.BasketProductDAO
 import com.site.tables.ProductDAO
-import com.site.tables.UserDAO
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.pipeline.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.configureUsersRouting() = routing {
+    val session = UserSession()
+
     authenticate {
         get("/users/me/basket/products") {
-            val customer = getCustomer()
+            val customer = session.getUser(call)
 
             val basketProducts = transaction {
                 customer.basket?.products?.map { it.product.toSerializable() }
@@ -26,12 +26,12 @@ fun Application.configureUsersRouting() = routing {
         }
 
         post("/users/me/basket/products/{productId}") {
-            val customer = getCustomer()
+            val customer = session.getUser(call)
 
             val productId = call.parameters["productId"]!!.toInt()
             val existsProduct = transaction {
                 ProductDAO.findById(productId)
-            } ?: throw Exception("Product not found")
+            } ?: throw NotFoundException("Product not found", productId.toString(), "Product")
 
             val userBasket = transaction {
                 if (customer.basket == null) {
@@ -50,7 +50,7 @@ fun Application.configureUsersRouting() = routing {
         }
 
         delete("/users/me/basket") {
-            val customer = getCustomer()
+            val customer = session.getUser(call)
 
             transaction {
                 customer.basket?.delete()
@@ -58,12 +58,4 @@ fun Application.configureUsersRouting() = routing {
             call.respond(HttpStatusCode.OK)
         }
     }
-}
-
-private fun PipelineContext<Unit, ApplicationCall>.getCustomer() : UserDAO {
-    val userIdentity = call.principal<JWTPrincipal>()!!
-    val userId = userIdentity.payload.getClaim(AppClaims.userId).asInt()
-    return transaction {
-        UserDAO.findById(userId)
-    } ?: throw Exception("User not found")
 }

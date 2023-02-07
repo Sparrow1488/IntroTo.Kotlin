@@ -1,6 +1,6 @@
 package com.site.tables
 
-import com.site.abstractions.IContractSerializable
+import com.site.infrastructure.abstractions.IContractSerializable
 import com.site.contracts.products.responses.ProductResponse
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass

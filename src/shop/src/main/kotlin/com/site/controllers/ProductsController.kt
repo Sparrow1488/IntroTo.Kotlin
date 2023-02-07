@@ -1,6 +1,7 @@
 package com.site.controllers
 
 import com.site.contracts.products.requests.ProductCreateRequest
+import com.site.infrastructure.exceptions.NotFoundException
 import com.site.tables.ProductDAO
 import com.site.tables.ShopDAO
 import io.ktor.server.application.*
@@ -21,7 +22,7 @@ fun Application.configureProductsRouting() = routing {
         val productId = call.parameters["id"]!!.toInt()
         val existsProduct = transaction {
             ProductDAO.findById(productId)?.toSerializable()
-                ?: throw Exception("Product not exists")
+                ?: throw NotFoundException("Product not found", productId.toString(), "Product")
         }
         call.respond(existsProduct)
     }
@@ -30,7 +31,7 @@ fun Application.configureProductsRouting() = routing {
         val request = call.receive<ProductCreateRequest>()
         val existsShop = transaction {
             ShopDAO.findById(request.shopId)
-        } ?: throw Exception("Shop not exists")
+        } ?: throw NotFoundException("Shop not found", request.shopId.toString(), "Shop")
 
         val createdProduct = transaction {
             ProductDAO.new {

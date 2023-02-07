@@ -1,6 +1,7 @@
 package com.site.controllers
 
 import com.site.contracts.shops.requests.ShopCreateRequest
+import com.site.infrastructure.exceptions.NotFoundException
 import com.site.tables.ShopDAO
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -20,7 +21,7 @@ fun Application.configureShopsRouting() = routing {
         val shopId = call.parameters["id"]!!.toInt()
         val existsShop = transaction {
             ShopDAO.findById(shopId)?.toSerializable()
-                ?: throw Exception("Shop not exists")
+                ?: throw NotFoundException("Shop not found", shopId.toString(), "Shop")
         }
         call.respond(existsShop)
     }

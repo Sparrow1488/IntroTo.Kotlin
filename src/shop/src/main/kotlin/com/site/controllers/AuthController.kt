@@ -1,9 +1,9 @@
 package com.site.controllers
 
-import com.site.constants.AppClaims
+import com.site.infrastructure.constants.AppClaims
 import com.site.contracts.users.requests.UserCreateRequest
 import com.site.contracts.users.requests.UserLoginRequest
-import com.site.services.IdentityManager
+import com.site.infrastructure.services.identity.IdentityManager
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -12,7 +12,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Application.configureAuthRouting() = routing {
+
     val identityManager = IdentityManager()
+
     post("/auth/register") {
         val request = call.receive<UserCreateRequest>()
         val jwtToken = identityManager.RegisterUser(request)
@@ -27,9 +29,11 @@ fun Application.configureAuthRouting() = routing {
 
     authenticate {
         get("/auth/username") {
-            val principal = call.principal<JWTPrincipal>()
-            val username = principal!![AppClaims.username]
-            call.respondText(username ?: "null")
+            val principal = call.principal<JWTPrincipal>()!!
+
+            val id = principal[AppClaims.userId]
+            val username = principal[AppClaims.username]
+            call.respondText("$id: $username")
         }
     }
 }

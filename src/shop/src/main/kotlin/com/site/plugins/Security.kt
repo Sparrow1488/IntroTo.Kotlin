@@ -2,8 +2,8 @@ package com.site.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.site.constants.AppClaims
-import com.site.constants.SecurityConfig
+import com.site.infrastructure.constants.AppClaims
+import com.site.infrastructure.constants.SecurityConfig
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
