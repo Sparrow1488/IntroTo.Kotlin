@@ -20,9 +20,9 @@
    
    * Update info
 
-5. Create products basket
+5. ~~Create products basket~~
 
-6. Get products basket
+6. ~~Get products basket~~
 
 7. Upload and mutate product image
 
