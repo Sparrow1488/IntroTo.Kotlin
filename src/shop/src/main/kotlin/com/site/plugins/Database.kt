@@ -21,6 +21,8 @@ fun Application.configureDatabase() = routing {
             Users,
             UserCredentials,
             Baskets,
-            BasketProducts)
+            BasketProducts,
+            Files,
+            FileUrls)
     }
 }

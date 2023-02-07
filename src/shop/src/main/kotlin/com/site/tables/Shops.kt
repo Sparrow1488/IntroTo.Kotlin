@@ -14,7 +14,7 @@ object Shops : IntIdTable("shops") {
 class ShopDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<ShopResponse> {
     companion object : IntEntityClass<ShopDAO>(Shops)
     var title by Shops.title
-    val products by ProductDAO referrersOn Products.shop
+    val products by ProductDAO referrersOn Products.shopId
 
     override fun toSerializable(): ShopResponse = ShopResponse(
         this.id.value,

@@ -11,7 +11,7 @@ object Products : IntIdTable("products") {
     val name = varchar("name", 50)
     val description = varchar("description", 1500).nullable()
     val price = double("price")
-    val shop = reference("shop_id", Shops)
+    val shopId = reference("shop_id", Shops)
 }
 
 class ProductDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<ProductResponse> {
@@ -19,7 +19,7 @@ class ProductDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<Produ
     var name by Products.name
     var description by Products.description
     var price by Products.price
-    var shop by ShopDAO referencedOn Products.shop
+    var shop by ShopDAO referencedOn Products.shopId
 
     override fun toSerializable(): ProductResponse = ProductResponse(
         this.id.value,
