@@ -21,13 +21,15 @@ fun Application.configureAuthRouting() = routing {
 
     post("/auth/login") {
         val request = call.receive<UserLoginRequest>()
-        identityManager.LoginUser(request)
+        val jwtToken = identityManager.LoginUser(request)
+        call.respond(hashMapOf("token" to jwtToken))
     }
 
     authenticate {
         get("/auth/username") {
-            val credentials = call.receive<JWTCredential>()
-            call.respondText(credentials.payload.getClaim(AppClaims.username).asString())
+            val principal = call.principal<JWTPrincipal>()
+            val username = principal!![AppClaims.username]
+            call.respondText(username ?: "null")
         }
     }
 }

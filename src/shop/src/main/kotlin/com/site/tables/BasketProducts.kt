@@ -12,6 +12,6 @@ object BasketProducts : IntIdTable("basket_products") {
 
 class BasketProductDAO(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<BasketProductDAO>(BasketProducts)
-    val product by BasketProductDAO referrersOn BasketProducts.product
-    val basket by BasketDAO referrersOn BasketProducts.basket
+    var product by ProductDAO referencedOn BasketProducts.product
+    var basket by BasketDAO referencedOn BasketProducts.basket
 }
