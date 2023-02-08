@@ -6,16 +6,11 @@ import io.ktor.server.http.content.*
 import io.ktor.server.application.*
 import java.io.File
 
-fun Application.configureRouting() {
+fun Application.configureRouting() = routing {
     configureProductsRouting()
     configureShopsRouting()
     configureAuthRouting()
     configureUsersRouting()
     configureFilesRouting()
-
-    routing {
-        static("/static") {
-            resources("static")
-        }
-    }
 }
+

@@ -1,7 +1,6 @@
 package com.site.controllers
 
 import com.site.contracts.products.requests.ProductCreateRequest
-import com.site.infrastructure.exceptions.BadRequestException
 import com.site.infrastructure.exceptions.ForbiddenException
 import com.site.infrastructure.exceptions.NotFoundException
 import com.site.infrastructure.services.users.UserSession
@@ -16,17 +15,17 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun Application.configureProductsRouting() = routing {
+fun Routing.configureProductsRouting() = route("/products") {
     val session = UserSession()
 
-    get("/products/latest") {
+    get("/latest") {
         val products = transaction {
             ProductDAO.all().map { it.toSerializable() }
         }
         call.respond(products)
     }
 
-    get("/products/{id}") {
+    get("/{id}") {
         val productId = call.parameters["id"]!!.toInt()
         val existsProduct = transaction {
             ProductDAO.findById(productId)?.toSerializable()
@@ -36,7 +35,7 @@ fun Application.configureProductsRouting() = routing {
     }
 
     authenticate {
-        post("/products/new") {
+        post("/new") {
             val user = session.getUser(call)
 
             val request = call.receive<ProductCreateRequest>()
@@ -61,7 +60,7 @@ fun Application.configureProductsRouting() = routing {
             call.respond(createdProduct)
         }
 
-        post("/products/{productId}/files/{fileId}") {
+        post("/{productId}/files/{fileId}") {
             val productId = call.parameters["productId"]!!.toInt()
             val fileId = call.parameters["fileId"]!!.toInt()
 

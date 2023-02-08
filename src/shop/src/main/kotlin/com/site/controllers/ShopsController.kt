@@ -12,17 +12,17 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun Application.configureShopsRouting() = routing {
+fun Routing.configureShopsRouting() = route("/shops") {
     val session = UserSession()
 
-    get("/shops/all") {
+    get("/all") {
         val shops = transaction {
             ShopDAO.all().map { it.toSerializable() }
         }
         call.respond(shops)
     }
 
-    get("/shops/{id}") {
+    get("/{id}") {
         val shopId = call.parameters["id"]!!.toInt()
         val existsShop = transaction {
             ShopDAO.findById(shopId)?.toSerializable()
@@ -32,7 +32,7 @@ fun Application.configureShopsRouting() = routing {
     }
 
     authenticate {
-        post("/shops/new") {
+        post("/new") {
             val user = session.getUser(call)
 
             val userShopsTitles = transaction {

@@ -11,24 +11,24 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Application.configureAuthRouting() = routing {
+fun Routing.configureAuthRouting() = route("/auth") {
 
     val identityManager = IdentityManager()
 
-    post("/auth/register") {
+    post("/register") {
         val request = call.receive<UserCreateRequest>()
         val jwtToken = identityManager.RegisterUser(request)
         call.respond(hashMapOf("token" to jwtToken))
     }
 
-    post("/auth/login") {
+    post("/login") {
         val request = call.receive<UserLoginRequest>()
         val jwtToken = identityManager.LoginUser(request)
         call.respond(hashMapOf("token" to jwtToken))
     }
 
     authenticate {
-        get("/auth/username") {
+        get("/username") {
             val principal = call.principal<JWTPrincipal>()!!
 
             val id = principal[AppClaims.userId]

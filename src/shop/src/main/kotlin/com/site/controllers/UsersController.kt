@@ -12,50 +12,52 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun Application.configureUsersRouting() = routing {
+fun Routing.configureUsersRouting() = route("/users") {
     val session = UserSession()
 
     authenticate {
-        get("/users/me/basket/products") {
-            val customer = session.getUser(call)
+        route("me") {
+            get("/basket/products") {
+                val customer = session.getUser(call)
 
-            val basketProducts = transaction {
-                customer.basket?.products?.map { it.product.toSerializable() }
-            }
-            call.respond(basketProducts ?: listOf())
-        }
-
-        post("/users/me/basket/products/{productId}") {
-            val customer = session.getUser(call)
-
-            val productId = call.parameters["productId"]!!.toInt()
-            val existsProduct = transaction {
-                ProductDAO.findById(productId)
-            } ?: throw NotFoundException("Product not found", productId.toString(), "Product")
-
-            val userBasket = transaction {
-                if (customer.basket == null) {
-                    BasketDAO.new { user = customer }
+                val basketProducts = transaction {
+                    customer.basket?.products?.map { it.product.toSerializable() }
                 }
-                customer.basket
-            }!!
-
-            val basketProducts = transaction {
-                BasketProductDAO.new {
-                    product = existsProduct
-                    basket = userBasket
-                }.basket.products.map { it.product.toSerializable() }
+                call.respond(basketProducts ?: listOf())
             }
-            call.respond(basketProducts)
-        }
 
-        delete("/users/me/basket") {
-            val customer = session.getUser(call)
+            post("/basket/products/{productId}") {
+                val customer = session.getUser(call)
 
-            transaction {
-                customer.basket?.delete()
+                val productId = call.parameters["productId"]!!.toInt()
+                val existsProduct = transaction {
+                    ProductDAO.findById(productId)
+                } ?: throw NotFoundException("Product not found", productId.toString(), "Product")
+
+                val userBasket = transaction {
+                    if (customer.basket == null) {
+                        BasketDAO.new { user = customer }
+                    }
+                    customer.basket
+                }!!
+
+                val basketProducts = transaction {
+                    BasketProductDAO.new {
+                        product = existsProduct
+                        basket = userBasket
+                    }.basket.products.map { it.product.toSerializable() }
+                }
+                call.respond(basketProducts)
             }
-            call.respond(HttpStatusCode.OK)
+
+            delete("/basket") {
+                val customer = session.getUser(call)
+
+                transaction {
+                    customer.basket?.delete()
+                }
+                call.respond(HttpStatusCode.OK)
+            }
         }
     }
 }

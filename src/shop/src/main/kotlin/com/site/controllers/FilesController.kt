@@ -9,10 +9,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
-fun Application.configureFilesRouting() = routing {
+fun Routing.configureFilesRouting() = route("/files") {
     val storage = FilesStorage()
 
-    post("/files") {
+    post {
         val part = call.receiveMultipart()
         val filesList = mutableListOf<FileResponse>()
         part.forEachPart { part ->
