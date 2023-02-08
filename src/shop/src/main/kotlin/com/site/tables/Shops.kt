@@ -9,12 +9,14 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 
 object Shops : IntIdTable("shops") {
     val title = varchar("title", 50)
+    val ownerId = reference("owner_id", Users)
 }
 
 class ShopDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<ShopResponse> {
     companion object : IntEntityClass<ShopDAO>(Shops)
     var title by Shops.title
     val products by ProductDAO referrersOn Products.shopId
+    var owner by UserDAO referencedOn Shops.ownerId
 
     override fun toSerializable(): ShopResponse = ShopResponse(
         this.id.value,

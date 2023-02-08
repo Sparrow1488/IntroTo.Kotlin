@@ -1,31 +1,26 @@
 ### TODO
 
-1. Swagger
+1. ~~Create product cards~~
 
-2. ~~Create product cards~~
-
-3. Get product cards
+2. ~~Get product cards~~
    
    * ~~all~~, 
    
-   * ~~by id~~, 
-   
-   * by name, 
-   
-   * by *category*
+   * ~~by id~~
 
-4. ~~Register & Login with JWT Token~~
+3. ~~Register & Login with JWT Token~~
    
    * ~~Hash password~~
-   
-   * Update info
 
-5. ~~Create products basket~~
+4. ~~Create products basket~~
 
-6. ~~Get products basket~~
+5. ~~Get products basket~~
 
-7. ~~Upload~~ and mutate ~~product image~~
+6. ~~Upload~~ and mutate ~~product image~~
 
 ### Feature
 
 1. Visitors (create basket by email)
+2. Validators
+3. Swagger
+4. Update / Delete resources
