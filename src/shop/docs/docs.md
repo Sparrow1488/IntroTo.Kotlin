@@ -16,7 +16,7 @@
 
 4. ~~Register & Login with JWT Token~~
    
-   * Hash password
+   * ~~Hash password~~
    
    * Update info
 
@@ -24,7 +24,7 @@
 
 6. ~~Get products basket~~
 
-7. Upload and mutate product image
+7. ~~Upload~~ and mutate ~~product image~~
 
 ### Feature
 
