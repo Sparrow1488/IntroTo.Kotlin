@@ -1,7 +1,7 @@
 package com.site.controllers
 
 import com.site.contracts.files.responses.FileResponse
-import com.site.infrastructure.uploaders.FilesStorage
+import com.site.infrastructure.services.uploaders.FilesStorage
 import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -21,7 +21,7 @@ fun Application.configureFilesRouting() = routing {
                 val fileResponse = transaction {
                     file.toSerializable()
                 }
-                filesList.plus(fileResponse)
+                filesList.plusAssign(fileResponse)
             }
         }
         call.respond(filesList)

@@ -21,6 +21,6 @@ class FileDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<FileResp
         id.value,
         fullName,
         mimeType,
-        hashMapOf() // TODO: pass urls
+        hashMapOf(*urls.map { Pair(it.description!!, it.value) }.toTypedArray())
     )
 }
