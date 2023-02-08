@@ -1,7 +1,7 @@
 package com.site.controllers
 
 import com.site.contracts.files.responses.FileResponse
-import com.site.infrastructure.services.uploaders.FilesStorage
+import com.site.infrastructure.services.storages.FilesStorage
 import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*

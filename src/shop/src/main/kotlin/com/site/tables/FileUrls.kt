@@ -7,7 +7,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 
 object FileUrls : IntIdTable("file_urls") {
     val value = varchar("value", 500)
-    val description = varchar("description", 100).nullable()
+    val description = varchar("description", 100).nullable() // TODO: change to enum "Type" (preview, original)
     val fileId = reference("file_id", Files)
 }
 

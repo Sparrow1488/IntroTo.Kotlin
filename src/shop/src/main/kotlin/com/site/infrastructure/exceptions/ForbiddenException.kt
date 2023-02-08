@@ -4,9 +4,9 @@ import io.ktor.http.*
 
 class ForbiddenException(
     message: String?,
-    reason: String = "undefined_reason")
-    : ApiStatusException(message)
-{
+    reason: String = "undefined_reason"
+) : ApiStatusException(message) {
+
     init {
         info["reason"] = reason
     }

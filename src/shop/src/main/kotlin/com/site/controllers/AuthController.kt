@@ -1,6 +1,7 @@
 package com.site.controllers
 
-import com.site.infrastructure.constants.AppClaims
+import com.site.contracts.tokens.responses.JwtTokenResponse
+import com.site.infrastructure.constants.PrincipalDefaults
 import com.site.contracts.users.requests.UserCreateRequest
 import com.site.contracts.users.requests.UserLoginRequest
 import com.site.infrastructure.services.identity.IdentityManager
@@ -17,22 +18,22 @@ fun Routing.configureAuthRouting() = route("/auth") {
 
     post("/register") {
         val request = call.receive<UserCreateRequest>()
-        val jwtToken = identityManager.RegisterUser(request)
-        call.respond(hashMapOf("token" to jwtToken))
+        val jwtToken = identityManager.registerUser(request)
+        call.respond(JwtTokenResponse(jwtToken))
     }
 
     post("/login") {
         val request = call.receive<UserLoginRequest>()
-        val jwtToken = identityManager.LoginUser(request)
-        call.respond(hashMapOf("token" to jwtToken))
+        val jwtToken = identityManager.loginUser(request)
+        call.respond(JwtTokenResponse(jwtToken))
     }
 
     authenticate {
         get("/username") {
             val principal = call.principal<JWTPrincipal>()!!
 
-            val id = principal[AppClaims.userId]
-            val username = principal[AppClaims.username]
+            val id = principal[PrincipalDefaults.ClaimNames.USER_ID]
+            val username = principal[PrincipalDefaults.ClaimNames.USERNAME]
             call.respondText("$id: $username")
         }
     }
