@@ -10,8 +10,12 @@ object Baskets : IntIdTable("baskets") {
     val userId = reference("user_id", Users, onDelete = ReferenceOption.CASCADE)
 }
 
-class BasketDAO(id: EntityID<Int>) : IntEntity(id) {
+class BasketDAO(
+    id: EntityID<Int>
+) : IntEntity(id) {
+
     companion object : IntEntityClass<BasketDAO>(Baskets)
+
     var user by UserDAO referencedOn Baskets.userId
     val products by BasketProductDAO referrersOn BasketProducts.basketId
 }

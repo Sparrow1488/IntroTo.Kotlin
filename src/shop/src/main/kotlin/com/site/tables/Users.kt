@@ -12,8 +12,12 @@ object Users : IntIdTable("users") {
     val lastName = varchar("last_name", 50)
 }
 
-class UserDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<UserResponse> {
+class UserDAO(
+    id: EntityID<Int>
+) : IntEntity(id), IContractSerializable<UserResponse> {
+
     companion object : IntEntityClass<UserDAO>(Users)
+
     var firstName by Users.firstName
     var lastName by Users.lastName
     val credentials by UserCredentialsDAO backReferencedOn UserCredentials.userId

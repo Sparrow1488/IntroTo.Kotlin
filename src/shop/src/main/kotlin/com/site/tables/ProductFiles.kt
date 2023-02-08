@@ -10,8 +10,12 @@ object ProductFiles : IntIdTable("product_files") {
     val productId = reference("product_id", Products)
 }
 
-class ProductFileDAO(id: EntityID<Int>) : IntEntity(id) {
+class ProductFileDAO(
+    id: EntityID<Int>
+) : IntEntity(id) {
+
     companion object : IntEntityClass<ProductFileDAO>(ProductFiles)
+
     var file by FileDAO referencedOn ProductFiles.fileId
     var product by ProductDAO referencedOn ProductFiles.productId
 }

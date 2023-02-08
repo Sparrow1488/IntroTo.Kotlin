@@ -14,8 +14,12 @@ object Products : IntIdTable("products") {
     val shopId = reference("shop_id", Shops)
 }
 
-class ProductDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<ProductResponse> {
+class ProductDAO(
+    id: EntityID<Int>
+) : IntEntity(id), IContractSerializable<ProductResponse> {
+
     companion object : IntEntityClass<ProductDAO>(Products)
+
     var name by Products.name
     var description by Products.description
     var price by Products.price
@@ -30,4 +34,5 @@ class ProductDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<Produ
         this.price,
         this.files.map { it.file.toSerializable() }
     )
+
 }

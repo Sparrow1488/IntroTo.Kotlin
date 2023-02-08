@@ -12,8 +12,12 @@ object Shops : IntIdTable("shops") {
     val ownerId = reference("owner_id", Users)
 }
 
-class ShopDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<ShopResponse> {
+class ShopDAO(
+    id: EntityID<Int>
+) : IntEntity(id), IContractSerializable<ShopResponse> {
+
     companion object : IntEntityClass<ShopDAO>(Shops)
+
     var title by Shops.title
     val products by ProductDAO referrersOn Products.shopId
     var owner by UserDAO referencedOn Shops.ownerId

@@ -14,8 +14,12 @@ object UserCredentials : IntIdTable("user_credentials") {
     val phone = varchar("phone", 50).nullable()
 }
 
-class UserCredentialsDAO(id: EntityID<Int>) : IntEntity(id) {
+class UserCredentialsDAO(
+    id: EntityID<Int>
+) : IntEntity(id) {
+
     companion object : IntEntityClass<UserCredentialsDAO>(UserCredentials)
+
     var user by UserDAO referencedOn UserCredentials.userId
     var login by UserCredentials.login
     var hashedPassword by UserCredentials.hashedPassword

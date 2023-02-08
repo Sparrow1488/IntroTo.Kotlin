@@ -11,8 +11,12 @@ object FileUrls : IntIdTable("file_urls") {
     val fileId = reference("file_id", Files)
 }
 
-class FileUrlDAO(id: EntityID<Int>) : IntEntity(id) {
+class FileUrlDAO(
+    id: EntityID<Int>
+) : IntEntity(id) {
+
     companion object : IntEntityClass<FileUrlDAO>(FileUrls)
+
     var value by FileUrls.value
     var description by FileUrls.description
     var file by FileDAO referencedOn FileUrls.fileId

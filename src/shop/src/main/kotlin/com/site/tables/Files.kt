@@ -12,15 +12,21 @@ object Files : IntIdTable("files") {
     val mimeType = varchar("mime_type", 20)
 }
 
-class FileDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<FileResponse> {
+class FileDAO(
+    id: EntityID<Int>
+) : IntEntity(id), IContractSerializable<FileResponse> {
+
     companion object : IntEntityClass<FileDAO>(Files)
+
     var fullName by Files.fullName
     var mimeType by Files.mimeType
     val urls by FileUrlDAO referrersOn FileUrls.fileId
+
     override fun toSerializable() = FileResponse(
         id.value,
         fullName,
         mimeType,
         hashMapOf(*urls.map { Pair(it.description!!, it.value) }.toTypedArray())
     )
+
 }
