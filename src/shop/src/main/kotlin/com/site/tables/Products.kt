@@ -20,12 +20,14 @@ class ProductDAO(id: EntityID<Int>) : IntEntity(id), IContractSerializable<Produ
     var description by Products.description
     var price by Products.price
     var shop by ShopDAO referencedOn Products.shopId
+    val files by ProductFileDAO referrersOn ProductFiles.productId
 
     override fun toSerializable(): ProductResponse = ProductResponse(
         this.id.value,
         this.shop.id.value,
         this.name,
         this.description,
-        this.price
+        this.price,
+        this.files.map { it.file.toSerializable() }
     )
 }

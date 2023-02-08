@@ -2,7 +2,9 @@ package com.site.controllers
 
 import com.site.contracts.products.requests.ProductCreateRequest
 import com.site.infrastructure.exceptions.NotFoundException
+import com.site.tables.FileDAO
 import com.site.tables.ProductDAO
+import com.site.tables.ProductFileDAO
 import com.site.tables.ShopDAO
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -42,5 +44,27 @@ fun Application.configureProductsRouting() = routing {
             }.toSerializable()
         }
         call.respond(createdProduct)
+    }
+
+    post("/products/{productId}/files/{fileId}") {
+        val productId = call.parameters["productId"]!!.toInt()
+        val fileId = call.parameters["fileId"]!!.toInt()
+
+        val existsProduct = transaction {
+            ProductDAO.findById(productId)
+        } ?: throw NotFoundException("Product not found", productId.toString(), "Product")
+
+        val existsFile = transaction {
+            FileDAO.findById(fileId)
+        } ?: throw NotFoundException("File not found", fileId.toString(), "File")
+
+        val updatedProduct = transaction {
+            ProductFileDAO.new {
+                product = existsProduct
+                file = existsFile
+            }.product.toSerializable()
+        }
+        
+        call.respond(updatedProduct)
     }
 }

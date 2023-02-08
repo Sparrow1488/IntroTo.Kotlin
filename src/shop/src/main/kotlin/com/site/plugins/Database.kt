@@ -23,6 +23,7 @@ fun Application.configureDatabase() = routing {
             Baskets,
             BasketProducts,
             Files,
-            FileUrls)
+            FileUrls,
+            ProductFiles)
     }
 }

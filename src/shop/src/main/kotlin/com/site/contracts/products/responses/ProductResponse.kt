@@ -1,5 +1,6 @@
 package com.site.contracts.products.responses
 
+import com.site.contracts.files.responses.FileResponse
 import com.site.contracts.shops.responses.ShopResponse
 import kotlinx.serialization.Serializable
 
@@ -9,5 +10,6 @@ data class ProductResponse(
     var shopId: Int,
     var name: String,
     var description: String?,
-    var price: Double
+    var price: Double,
+    var files: List<FileResponse>
 )
