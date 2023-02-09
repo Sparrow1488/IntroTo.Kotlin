@@ -4,13 +4,14 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import models.Account
+import models.FileSrc
 import models.TghResponse
 import requests.CreateAccountRequest
 import requests.CreatePageRequest
 
 class Telegraph {
 
-    private val client: TelegraphClient = TelegraphClient()
+    val client: TelegraphClient = TelegraphClient()
 
     @OptIn(ExperimentalSerializationApi::class)
     private val json: Json = Json {
@@ -19,19 +20,31 @@ class Telegraph {
         namingStrategy = JsonNamingStrategy.SnakeCase
     }
 
+    suspend fun uploadImage(filePath: String) : FileSrc {
+        return getObject(
+            client.uploadImage(filePath)
+                .replace("[", "") // TODO: can't parse "[ { } ]"
+                .replace("]", "")
+        )
+    }
+
     suspend fun createAccount(request: CreateAccountRequest): Account {
-        return getResult(client.sendRequestJson(TghMethods.CREATE_ACCOUNT, request))
+        return getResponseObject(client.sendRequestJson(TghMethods.CREATE_ACCOUNT, request))
     }
 
     suspend fun createPage(request: CreatePageRequest) : String {
         return client.sendRequestJson(TghMethods.CREATE_PAGE, request)
     }
 
-    private inline fun <reified TResult> getResult(jsonResponse: String) : TResult {
-        val tghResponse = json.decodeFromString<TghResponse<TResult>>(jsonResponse)
+    private inline fun <reified TResult> getResponseObject(jsonResponse: String) : TResult {
+        val tghResponse = getObject<TghResponse<TResult>>(jsonResponse)
         if(!tghResponse.ok || tghResponse.result == null) {
             throw Exception("Invalid Telegraph response")
         }
         return tghResponse.result!!
+    }
+
+    private inline fun <reified TResult> getObject(jsonResponse: String) : TResult {
+        return json.decodeFromString(jsonResponse)
     }
 }

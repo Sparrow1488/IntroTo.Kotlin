@@ -6,7 +6,8 @@ import kotlinx.serialization.Serializable
 class Account(
     val shortName: String,
     val authorName: String,
-    val authorUrl: String,
     val accessToken: String,
-    val authUrl: String
-)
+) {
+    // authUrl: String,
+    // authorUrl: String
+}
