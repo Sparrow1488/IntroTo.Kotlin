@@ -24,5 +24,5 @@ suspend fun main() {
         true
     )
     val page = telegraph.createPage(newPage)
-    println(page)
+    println(page.url)
 }

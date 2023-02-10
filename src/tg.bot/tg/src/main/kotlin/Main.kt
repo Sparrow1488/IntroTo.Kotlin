@@ -1,14 +1,11 @@
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.*
-import com.github.kotlintelegrambot.dispatcher.*
-import com.github.kotlintelegrambot.entities.*
 import com.typesafe.config.Config
 import org.koin.core.context.GlobalContext.get
 import plugin.configureDependencyInjection
 import routes.configureMediaRouting
 import routes.configureNavigation
 import routes.configureStartCommand
-import java.io.File
 
 fun main() {
     configureDependencyInjection()

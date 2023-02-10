@@ -5,6 +5,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import models.Account
 import models.FileSrc
+import models.PageInfo
 import models.TghResponse
 import requests.CreateAccountRequest
 import requests.CreatePageRequest
@@ -32,8 +33,8 @@ class Telegraph {
         return getResponseObject(client.sendRequestJson(TghMethods.CREATE_ACCOUNT, request))
     }
 
-    suspend fun createPage(request: CreatePageRequest) : String {
-        return client.sendRequestJson(TghMethods.CREATE_PAGE, request)
+    suspend fun createPage(request: CreatePageRequest) : PageInfo {
+        return getResponseObject(client.sendRequestJson(TghMethods.CREATE_PAGE, request))
     }
 
     private inline fun <reified TResult> getResponseObject(jsonResponse: String) : TResult {
