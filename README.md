@@ -195,3 +195,21 @@ tom.also { // it context
     it.email = "tom@yandex.ru"
 }
 ```
+
+#### Init block
+
+Поскольку primary-конструктор класса не имеет тела, для обработки входных параметров можно воспользоваться блоком init:
+
+```kotlin
+class Person(name: String) {
+    init {
+        if(name.isNullOrEmpty()) {
+            throw ArgumentException("You loh")
+        }
+    }
+}
+```
+
+#### Suspend functions
+
+One of the most important things to remember about the suspend functions is that they can only be invoked from another suspend function or from a coroutine. Suspending functions are merely standard Kotlin functions with the suspend modifier added, indicating that they can suspend coroutine execution without blocking the current thread.
