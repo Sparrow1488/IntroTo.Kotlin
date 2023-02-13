@@ -1,13 +1,14 @@
 package requests
 
 class CreatePageRequest(
-    val accessToken: String,
-    val title: String,
-    val authorName: String,
-    val authorUrl: String,
-    val content: ContentRequest,
-    val returnContent: Boolean
+    private val accessToken: String,
+    private val title: String,
+    private val authorName: String,
+    private val authorUrl: String,
+    private val content: ContentRequest,
+    private val returnContent: Boolean
 ) : Request() {
+
     override fun toUrlParams(): String {
         return encodeParams(
             hashMapOf(

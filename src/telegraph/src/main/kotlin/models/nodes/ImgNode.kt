@@ -1,4 +1,6 @@
-package models
+package models.nodes
+
+import models.Attribute
 
 class ImgNode(
     src: String

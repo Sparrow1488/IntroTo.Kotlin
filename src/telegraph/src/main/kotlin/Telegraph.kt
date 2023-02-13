@@ -40,7 +40,7 @@ class Telegraph {
     private inline fun <reified TResult> getResponseObject(jsonResponse: String) : TResult {
         val tghResponse = getObject<TghResponse<TResult>>(jsonResponse)
         if(!tghResponse.ok || tghResponse.result == null) {
-            throw Exception("Invalid Telegraph response")
+            throw Exception("Invalid Telegraph response. Json response:\n$jsonResponse")
         }
         return tghResponse.result!!
     }

@@ -4,10 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateAccountRequest(
-    val shortName: String,
-    val authorName: String,
-    val authorUrl: String
+    private val shortName: String,
+    private val authorName: String,
+    private val authorUrl: String
 ) : Request() {
+
     override fun toUrlParams(): String {
         return encodeParams(
             hashMapOf(
